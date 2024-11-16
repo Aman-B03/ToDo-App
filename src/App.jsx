@@ -7,22 +7,32 @@ function App() {
   const [count, setCount] = useState(0)
   const [Todo, setTodo] = useState('');
   const [Todos, setTodos] = useState([]);
+  const [trigger, setTrigger] = useState(false)
   const [showRemain, setshowRemain] = useState(false)
   const [buttonText, setbuttonText] = useState('Show Remaining Todos')
 
-  // const saveToLS = () => {
-  //   localStorage.setItem("Todos", JSON.stringify(Todos))
 
+    // const saveToLS = () => {
+      useEffect(()=>{
+        if(trigger){
+        localStorage.setItem("Todos", JSON.stringify(Todos))
+        }
+      },[Todos, trigger])
+    
+    
   // }
+ 
+  
+  
 
-  // useEffect(() => {
-  //   let stringLength = localStorage.getItem("Todos")
-  //   if (stringLength) {
-  //     let todos = JSON.parse(stringLength);
-  //     setTodos(todos)
-  //   }
+  useEffect(() => {
+    let stringLength = localStorage.getItem("Todos")
+    if (stringLength) {
+      let todos = JSON.parse(stringLength);
+      setTodos(todos)
+    }
 
-  // }, [])
+  }, [])
 
 
   const handleChange = (e) => {
@@ -33,6 +43,7 @@ function App() {
   const handleAdd = () => {
     setTodos([...Todos, { Todo, isCompleted: false, id: uuidv4() }])
     setTodo('')
+    setTrigger(true)
     // saveToLS()
 
   }
@@ -47,6 +58,7 @@ function App() {
       return item.id !== id;
     })
     setTodos(newTodos)
+    setTrigger(true)
     // saveToLS()
 
   }
@@ -56,6 +68,7 @@ function App() {
     })
 
     setTodos(newTodos)
+    setTrigger(true)
 
     // saveToLS()
 
@@ -68,6 +81,7 @@ function App() {
     let newTodos = [...Todos];
     newTodos[index].isCompleted = !newTodos[index].isCompleted;
     setTodos(newTodos);
+    setTrigger(true)
     // saveToLS()
   }
 
@@ -99,7 +113,7 @@ function App() {
         <p className='text-xl font-semibold text-center'>Your Todos</p>
         <button onClick={handleShowRemain} className='hover:bg-orange-900 border my-auto px-2 py-1 rounded-md bg-orange-700 text-white text-sm font-bold'>{buttonText}</button>
 
-        {Todos.map(item => {
+        {Todos.map((item) => {
           if (showRemain == false) {
 
             return (
